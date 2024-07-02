@@ -1,0 +1,6 @@
+/* custom-calendar.css */
+.charged {
+  background-color: #d3d3d3 !important;
+  color: #a9a9a9 !important;
+  pointer-events: none;
+}

@@ -1,0 +1,12 @@
+.swiper-pagination-bullet {
+  background: white !important;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: white; /* Change this to your desired color */
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 40px; /* Optional: change the size of the arrow */
+}
