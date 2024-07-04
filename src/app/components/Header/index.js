@@ -79,6 +79,13 @@ const Header = () => {
                 >
                   상세정보
                 </Link>
+                <Link
+                  href="/auth/signin"
+                  passHref
+                  className=" hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-2 rounded-md text-sm"
+                >
+                  로그인/회원가입
+                </Link>
               </div>
             </div>
           </div>
@@ -108,6 +115,13 @@ const Header = () => {
             className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-b from-white/10 via-white/50 to-blue/50"
           >
             상세정보
+          </Link>
+          <Link
+            href="/auth/signin"
+            passHref
+            className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-b from-white/10 via-white/50 to-blue/50"
+          >
+            로그인/회원가입
           </Link>
         </div>
       </div>
