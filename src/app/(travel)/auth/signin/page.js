@@ -1,4 +1,4 @@
-import SigninSection from "@/app/components/Signin";
+import SigninSection from "@/app/components/Auth/Signin";
 import React from "react";
 
 function Signin() {
