@@ -2,6 +2,7 @@
 
 import useStore from "@/libs/store";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 function ConfirmationSection() {
@@ -60,7 +61,12 @@ function ConfirmationSection() {
             <p>옵션: {selectedRoom.options.join(", ")}</p>
           </div>
         ) : (
-          <p className="text-red-500">객실이 선택되지 않았습니다.</p>
+          <div>
+            <p className="text-red-500">객실이 선택되지 않았습니다.</p>
+            <Link href="/reservation" className="underline underline-offset-8">
+              객실 선택하기
+            </Link>
+          </div>
         )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
