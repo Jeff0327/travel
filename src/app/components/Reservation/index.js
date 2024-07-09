@@ -126,7 +126,7 @@ function ReservationSection() {
                     )}
                     <div>
                       <p className="font-semibold">{room.roomName}</p>
-                      <p>가격: {room.price}</p>
+                      <p>가격: {room.price.toLocaleString("ko-KR")}원</p>
                       <p>최대인원: {room.maxOccupancy}</p>
                       <p>옵션: {room.options.join(", ")}</p>
                     </div>
@@ -142,7 +142,11 @@ function ReservationSection() {
                 )}
               </div>
             ) : (
-              <p>No rooms available for the selected dates.</p>
+              <div className="flex justify-center items-center p-6 bg-white rounded-lg shadow-lg">
+                <p className="text-gray-700 text-lg font-semibold">
+                  여행 일정을 선택해주세요.
+                </p>
+              </div>
             )}
           </div>
         </div>

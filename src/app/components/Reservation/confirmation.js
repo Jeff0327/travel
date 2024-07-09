@@ -54,8 +54,8 @@ function ConfirmationSection() {
                 />
               </div>
             )}
-            <p>Room Name: {selectedRoom.roomName}</p>
-            <p>가격: {selectedRoom.price}</p>
+            <p>{selectedRoom.roomName}</p>
+            <p>가격: {selectedRoom.price.toLocaleString("ko-KR")}원</p>
             <p>최대인원: {selectedRoom.maxOccupancy}</p>
             <p>옵션: {selectedRoom.options.join(", ")}</p>
           </div>
