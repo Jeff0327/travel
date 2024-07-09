@@ -1,18 +1,16 @@
-// src/app/components/Home/Load/map.js
 import React, { useEffect } from "react";
 import ScriptLoader from "./ScriptLoader";
 
 const Map = () => {
   useEffect(() => {
     const initMap = () => {
-      const { naver } = window;
-      const map = new naver.maps.Map("map", {
-        center: new naver.maps.LatLng(37.5665, 126.978),
+      const map = new window.google.maps.Map(document.getElementById("map"), {
+        center: { lat: 37.5665, lng: 126.978 },
         zoom: 10,
       });
     };
 
-    if (window.naver) {
+    if (window.google && window.google.maps) {
       initMap();
     } else {
       window.initMap = initMap;
@@ -20,17 +18,19 @@ const Map = () => {
   }, []);
 
   return (
-    <>
-      <ScriptLoader
-        url={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NAVER_MAP_CLIENT_ID}&submodules=geocoder`}
-        onLoad={() => {
-          if (window.initMap) {
-            window.initMap();
-          }
-        }}
-      />
-      <div id="map" style={{ width: "100%", height: "400px" }}></div>
-    </>
+    <div className="flex flex-col w-full h-[50vh]">
+      <span className="flex flex-col justify-start items-start ml-2 p-4">
+        <strong>오시는 길</strong>
+        <strong>연락처 : 010-0000-0000</strong>
+      </span>
+      <iframe
+        src="https://storage.googleapis.com/maps-solutions-at077set2b/locator-plus/hbuq/locator-plus.html"
+        loading="lazy"
+        className="w-full h-[50vh] border-0 shadow-lg rounded-lg"
+        style={{ border: "none" }}
+        allowFullScreen
+      ></iframe>
+    </div>
   );
 };
 

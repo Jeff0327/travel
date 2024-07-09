@@ -1,19 +1,21 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export async function middleware(req) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("authjs.csrf-token")?.value;
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req, secret });
+
   if (!token) {
-    const protocol = req.nextUrl.protocol;
-    const host = req.nextUrl.host;
-    const redirectUrl = `${protocol}//${host}/auth/signin`;
-    return NextResponse.redirect(redirectUrl);
-  } else {
-    return NextResponse.next();
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
   }
+
+  if (!token.isAdmin) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  return NextResponse.next();
 }
+
 export const config = {
-  //로그인 엑세스 url
-  matcher: [],
+  matcher: ["/admin/:path*"],
 };

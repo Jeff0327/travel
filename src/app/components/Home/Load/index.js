@@ -72,7 +72,7 @@ function Load() {
       </Swiper>
 
       <RoomInfo />
-      {/* <Map /> */}
+      <Map />
     </div>
   );
 }

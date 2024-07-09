@@ -1,12 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
-
+import { getSession } from "next-auth/react";
+import IsLogin from "./IsLogin";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const fetchSession = async () => {
+      setIsLoading(true);
+      try {
+        const sessionData = await getSession();
+        setSession(sessionData);
+      } catch (err) {
+        console.log("get session error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSession();
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -33,7 +51,7 @@ const Header = () => {
             <div className="flex-shrink-0">
               {/*web*/}
               <Link href="/">
-                <div className="flex-row justify-around items-center hidden sm:flex h-8 w-auto">
+                <div className="flex-row justify-around items-center hidden sm:flex h-8 my-2 w-auto">
                   <Image
                     src="/favicon.png"
                     alt="Logo"
@@ -61,31 +79,35 @@ const Header = () => {
                 <Link
                   href="/main"
                   passHref
-                  className="hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-2 rounded-md text-sm"
+                  className="hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-4 rounded-md text-sm"
                 >
                   홈
                 </Link>
                 <Link
                   href="/reservation"
                   passHref
-                  className="hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-2 rounded-md text-sm"
+                  className="hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-4 rounded-md text-sm"
                 >
                   예약하기
                 </Link>
                 <Link
                   href="/"
                   passHref
-                  className=" hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-2 rounded-md text-sm"
+                  className=" hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-4 rounded-md text-sm"
                 >
                   상세정보
                 </Link>
-                <Link
-                  href="/auth/signin"
-                  passHref
-                  className=" hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-2 rounded-md text-sm"
-                >
-                  로그인/회원가입
-                </Link>
+                {session && !isLoading ? (
+                  <IsLogin session={session} />
+                ) : (
+                  <Link
+                    href="/auth/signin"
+                    passHref
+                    className="hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-4 rounded-md text-sm"
+                  >
+                    로그인/회원가입
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -94,7 +116,7 @@ const Header = () => {
 
       {/* Mobile menu */}
       <div className={`sm:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 text-gray-700 font-bold">
+        <div className="flex justify-around text-gray-800 font-bold">
           <Link
             href="/main"
             passHref

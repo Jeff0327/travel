@@ -1,0 +1,8 @@
+.reserved-date {
+  background-color: #ff6961 !important;
+  color: white !important;
+}
+
+.reserved-date:hover {
+  background-color: #ff5c5c !important;
+}

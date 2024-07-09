@@ -15,6 +15,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  isAdmin       Boolean   @default(false)
 }
 
 model Account {
@@ -49,4 +50,26 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Room {
+  id            Int       @id @default(autoincrement())
+  roomName      String
+  price         Int
+  options       String[]
+  maxOccupancy  Int
+  images        String[]
+  reservations  Reservation[]
+}
+
+model Reservation {
+  id            Int       @id @default(autoincrement())
+  reservationId String    @unique
+  checkInDate   DateTime
+  checkOutDate  DateTime
+  guestName     String
+  guestCount    Int
+  totalPrice    Int
+  roomId        Int
+  room          Room      @relation(fields: [roomId], references: [id])
 }

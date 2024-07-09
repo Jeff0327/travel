@@ -15,13 +15,13 @@ function RoomInfo() {
   const [mainImage, setMainImage] = useState(roomImages[0]);
 
   return (
-    <div className="bg-white text-gray-500 w-full sm:max-w-2/3 h-auto min-h-screen p-5 mx-auto flex flex-col sm:flex-row my-5">
+    <div className="bg-white text-gray-500 w-full sm:max-w-2/3 h-auto min-h-screen p-5 mx-auto flex flex-col sm:flex-row md:flex-col lg:flex-row my-5">
       <div
         data-aos="fade-up"
         data-aos-offset="200"
         data-aos-delay="50"
         data-aos-duration="1000"
-        className="w-full sm:w-2/3 flex justify-center items-center px-5 py-5 bg-gray-100 rounded-lg shadow-lg"
+        className="w-full flex justify-center items-center px-5 py-5 bg-gray-100 rounded-lg shadow-lg"
       >
         <Image
           className="rounded-lg w-full h-full sm:min-h-[700px] min-h-[400px]"
@@ -31,17 +31,22 @@ function RoomInfo() {
           height={1000}
         />
       </div>
-      <div className="flex flex-col bg-gray-400 justify-between w-full sm:w-1/2 p-5 mt-5 sm:mt-0">
-        <div>
-          <h2 className="text-2xl font-bold mb-4 text-yellow-400">
-            Room Information
-          </h2>
-          <div className="text-white text-start">
-            <p className="mb-4">- 모든 객실은 16:00부터 입실가능합니다.</p>
-            <p className="mb-4">- 일회용품과 웰컴음료 무료제공.</p>
-            <p className="mb-4">- 전 객실 소독 및 방역을 실시중입니다.</p>
+
+      <div className="flex flex-col justify-between bg-gray-200 w-full mt-5 sm:mt-0">
+        <div className="text-white text-start text-[#000066] font-semibold">
+          <div className="flex items-center w-auto h-[10vh] bg-[#3333CC]">
+            <h2 className="ml-5 text-3xl font-bold mb-4 text-white">
+              Room Information
+            </h2>
           </div>
+          <span className="flex flex-col gap-5 p-4 text-[#000066]">
+            <p>- 모든 객실은 16:00부터 입실가능합니다.</p>
+            <p>- 일회용품과 웰컴음료 무료제공.</p>
+            <p>- 전 객실 소독 및 방역을 실시중입니다.</p>
+            <p>- 조식제공(별도요금).</p>
+          </span>
         </div>
+
         <div
           className="flex flex-wrap justify-around"
           data-aos="fade-up"
@@ -50,7 +55,7 @@ function RoomInfo() {
           data-aos-duration="1000"
         >
           {roomImages.map((image, index) => (
-            <div key={index} className="text-center mb-4">
+            <div key={index} className="text-center mb-4 text-[#000066]">
               <Image
                 className="rounded-lg cursor-pointer w-24 h-24 sm:w-[10vw] sm:h-[12vh]"
                 src={image.src}
@@ -59,7 +64,9 @@ function RoomInfo() {
                 height={150}
                 onClick={() => setMainImage(image)}
               />
-              <p className="text-[15px] p-2 text-white">{image.alt}</p>
+              <p className="text-[15px] p-2 text-gray-800 font-bold">
+                {image.alt}
+              </p>
             </div>
           ))}
         </div>

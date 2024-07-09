@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "@/styles/tailwind.css";
+import AuthSession from "./context/AuthSession";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +15,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <AuthSession>{children}</AuthSession>
+      </body>
     </html>
   );
 }

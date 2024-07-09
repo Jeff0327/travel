@@ -1,86 +1,151 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { format, parseISO } from "date-fns";
-import { enUS, ko } from "date-fns/locale";
-import "@/styles/custom-calendar.css"; // Import custom CSS for styling
-
-const locales = { en: enUS, ko: ko };
+import React, { useState, useEffect, useCallback } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "@/styles/custom-react-datepicker.css"; // Import custom CSS for styling
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
+import axios from "axios";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import useStore from "@/libs/store";
 
 function ReservationSection() {
-  const [date, setDate] = useState(new Date());
-  const [showDetails, setShowDetails] = useState(false);
-  const [locale, setLocale] = useState("en");
-  const chargedData = {
-    "2024-07-17": true,
-    "2024-07-18": true,
-    // Add more dates here
-  };
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [selectedRoomIndex, setSelectedRoomIndex] = useState(null);
+  const setSelectedRoom = useStore((state) => state.setSelectedRoom);
 
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-  };
+  const getAvailableRooms = useCallback(async () => {
+    if (!selectedDates[0] || !selectedDates[1]) return;
 
-  const toggleDetails = () => {
-    setShowDetails(!showDetails);
-  };
-
-  const tileClassName = ({ date, view }) => {
-    if (view === "month") {
-      const dateString = format(date, "yyyy-MM-dd");
-      if (chargedData[dateString]) {
-        return "charged";
+    setIsLoading(true);
+    try {
+      const response = await axios.post("/api/reservation/getReservation", {
+        checkIn: selectedDates[0],
+        checkOut: selectedDates[1],
+      });
+      if (response.status === 200) {
+        setAvailableRooms(response.data.Rooms);
       }
+    } catch (err) {
+      console.log("Get Room Info Error", err);
+    } finally {
+      setIsLoading(false);
     }
-    return null;
-  };
-
-  const tileDisabled = ({ date, view }) => {
-    if (view === "month") {
-      const dateString = format(date, "yyyy-MM-dd");
-      return chargedData[dateString] || false;
-    }
-    return false;
-  };
+  }, [selectedDates]);
 
   useEffect(() => {
-    // Determine the locale based on the user's preference or browser settings
-    const userLocale = navigator.language || "en-US";
-    setLocale(userLocale.startsWith("ko") ? "ko" : "en");
-  }, []);
+    getAvailableRooms();
+  }, [getAvailableRooms]);
+
+  const handleDateChange = (dates) => {
+    const [start, end] = dates;
+    setSelectedDates([start, end]);
+  };
+
+  const handleRoomClick = (index) => {
+    setSelectedRoomIndex(index);
+  };
+
+  const handleReservation = () => {
+    if (selectedRoomIndex !== null) {
+      const selectedRoom = availableRooms[selectedRoomIndex];
+      setSelectedRoom(selectedRoom);
+
+      if (!session) {
+        router.push("/auth/signin");
+      } else {
+        router.push(`/reservation/confirmation/${session.user.id}`);
+      }
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 py-10">
-      <div className="flex flex-row w-full max-w-4xl">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-1/2 mr-4">
-          <Calendar
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col md:flex-row w-full max-w-6xl">
+        <div className="flex flex-col justify-start items-center bg-white p-6 rounded-lg shadow-lg w-full md:w-2/3 mb-4 md:mb-0 md:mr-4">
+          <DatePicker
+            className="mr-2"
+            selected={selectedDates[0]}
             onChange={handleDateChange}
-            value={date}
-            className="react-calendar"
-            tileClassName={tileClassName}
-            tileDisabled={tileDisabled}
-            locale={locales[locale]}
+            startDate={selectedDates[0]}
+            endDate={selectedDates[1]}
+            selectsRange
+            inline
+            locale={ko}
           />
-        </div>
-        <div className="bg-gray-600 p-6 rounded-lg shadow-lg w-1/2 flex flex-col items-center justify-center text-white">
-          <p>Additional Information or Content</p>
-        </div>
-      </div>
-      <div className="mt-6">
-        <p>Selected Date: {date.toDateString()}</p>
-        <button
-          onClick={toggleDetails}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-        >
-          Show Reservation Details
-        </button>
-        {showDetails && (
-          <div className="mt-4 p-4 bg-white rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-2">Reservation Details</h3>
-            <p>Details about the reservation will go here.</p>
+          <div className="flex flex-col p-2">
+            <p>
+              시작일:{" "}
+              <strong>
+                {selectedDates[0] && format(selectedDates[0], "yyyy-MM-dd")}
+              </strong>
+            </p>
+            <p>
+              종료일:{" "}
+              <strong>
+                {selectedDates[1] && format(selectedDates[1], "yyyy-MM-dd")}
+              </strong>
+            </p>
           </div>
-        )}
+        </div>
+        <div className="bg-gray-50 p-6 rounded-lg shadow-lg w-full text-gray-600">
+          <div className="mt-4">
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : availableRooms.length > 0 ? (
+              <div className="flex flex-col mt-4">
+                <h3 className="bg-blue-300 text-white text-xl font-bold mb-2 p-2 rounded">
+                  예약가능 객실정보
+                </h3>
+                {availableRooms.map((room, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleRoomClick(index)}
+                    className={`hover:cursor-pointer mb-2 flex flex-col md:flex-row items-center p-2 rounded ${
+                      selectedRoomIndex === index
+                        ? "border-2 border-red-500"
+                        : "border"
+                    }`}
+                  >
+                    {room.images && room.images.length > 0 && (
+                      <div className="mr-4">
+                        <Image
+                          src={room.images[0]} // Display only the first image for simplicity
+                          alt={`Room image ${index}`}
+                          className="rounded"
+                          width={200}
+                          height={200}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-semibold">{room.roomName}</p>
+                      <p>가격: {room.price}</p>
+                      <p>최대인원: {room.maxOccupancy}</p>
+                      <p>옵션: {room.options.join(", ")}</p>
+                    </div>
+                  </div>
+                ))}
+                {selectedRoomIndex !== null && (
+                  <button
+                    onClick={handleReservation}
+                    className="mt-4 p-2 bg-green-500 text-white rounded hover:bg-green-700"
+                  >
+                    예약하기
+                  </button>
+                )}
+              </div>
+            ) : (
+              <p>No rooms available for the selected dates.</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
