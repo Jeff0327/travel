@@ -38,12 +38,20 @@ const Header = () => {
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className="inline-flex items-center justify-center p-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black"
             >
               {isOpen ? (
-                <RxCross2 className="block h-6 w-6" aria-hidden="true" />
+                <RxCross2
+                  className="block h-6 w-6"
+                  color="black"
+                  aria-hidden="true"
+                />
               ) : (
-                <HiMenuAlt2 className="block h-6 w-6" aria-hidden="true" />
+                <HiMenuAlt2
+                  className="block h-7 w-7"
+                  color="black"
+                  aria-hidden="true"
+                />
               )}
             </button>
           </div>
@@ -51,7 +59,7 @@ const Header = () => {
             <div className="flex-shrink-0">
               {/*web*/}
               <Link href="/">
-                <div className="flex-row justify-around items-center hidden sm:flex h-8 my-2 w-auto">
+                <div className="flex-row justify-around items-center hidden sm:flex h-8 my-2 w-auto work-sans-headline">
                   <Image
                     src="/favicon.png"
                     alt="Logo"
@@ -62,7 +70,7 @@ const Header = () => {
                   <span className="text-center">Travel</span>
                 </div>
                 {/*mobile*/}
-                <div className="flex-row justify-around items-center flex sm:hidden h-8 w-auto">
+                <div className="flex-row justify-around items-center flex sm:hidden h-8 w-auto work-sans-headline">
                   <Image
                     src="/favicon.png"
                     alt="Logo"
@@ -76,13 +84,6 @@ const Header = () => {
             </div>
             <div className="hidden sm:block sm:ml-6 flex-1">
               <div className="flex justify-around text-gray-800 font-bold">
-                <Link
-                  href="/main"
-                  passHref
-                  className="hover:bg-gradient-t from-green via-white to-yellow-500 px-10 py-4 rounded-md text-sm"
-                >
-                  홈
-                </Link>
                 <Link
                   href="/reservation"
                   passHref
@@ -116,32 +117,25 @@ const Header = () => {
 
       {/* Mobile menu */}
       <div className={`sm:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="flex justify-around text-gray-800 font-bold">
-          <Link
-            href="/main"
-            passHref
-            className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-b from-white/10 via-white/50 to-blue/50"
-          >
-            홈
-          </Link>
+        <div className="flex flex-col items-center justify-around font-bold w-full">
           <Link
             href="/reservation"
             passHref
-            className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-b from-white/10 via-white/50 to-blue/50"
+            className="flex justify-center items-center py-2 bg-gradient-to-b from-white/10 via-white/50 to-blue/50 w-full"
           >
             예약하기
           </Link>
           <Link
             href="/"
             passHref
-            className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-b from-white/10 via-white/50 to-blue/50"
+            className="flex justify-center items-center py-2 bg-gradient-to-b from-white/10 via-white/50 to-blue/50 w-full"
           >
             상세정보
           </Link>
           <Link
             href="/auth/signin"
             passHref
-            className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-b from-white/10 via-white/50 to-blue/50"
+            className="flex justify-center items-center py-2 bg-gradient-to-b from-white/10 via-white/50 to-blue/50 w-full"
           >
             로그인/회원가입
           </Link>

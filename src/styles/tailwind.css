@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url("https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Grandiflora+One&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -30,4 +30,9 @@
 
 .react-calendar .react-calendar__tile {
   padding: 20px;
+}
+.work-sans-headline {
+  font-family: "Work Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
 }
